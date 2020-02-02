@@ -15,4 +15,6 @@ typedef struct Carte
   int Num;
 } Carte;
 
+extern void generatePile(void);
+
 #endif

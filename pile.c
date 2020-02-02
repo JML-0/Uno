@@ -1,5 +1,6 @@
 #include "pile.h"
 #include <stdlib.h>
+#include <time.h>
 #include <assert.h>
 
 /*! \brief indice indiquant le haut de la pile. */
@@ -30,17 +31,16 @@ int empty(void) {
  */
 void shuffle()
 {
-    size_t i, j;
-    Carte temp;
-
-    for (i = 0; i < PILE_MAX; i++)
+    srand(time(NULL));
+    if (PILE_MAX > 1) 
     {
-        j = i + rand() % (PILE_MAX - i);
-        
-        temp = _pile[i];
-        _pile[i] = _pile[j];
-        _pile[j] = temp;
-    }  
+        size_t i;
+        for (i = 0; i < PILE_MAX - 1; i++) 
+        {
+          size_t j = i + rand() / (RAND_MAX / (PILE_MAX - i) + 1);
+          Carte t = _pile[j];
+          _pile[j] = _pile[i];
+          _pile[i] = t;
+        }
+    } 
 }
-
-void resetHaut() { _haut = PILE_MAX; }

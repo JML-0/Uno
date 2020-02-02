@@ -12,7 +12,6 @@ extern void push(Carte v);
 extern Carte pop(void);
 extern int empty(void);
 extern void shuffle(void);
-extern void resetHaut(void);
 
 #ifdef __cplusplus
 }

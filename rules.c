@@ -1,13 +1,14 @@
 #include "rules.h"
 #include "pile.h"
+#include "controls.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
 /*
- * Génère toutes les cartes du UNO
+ * Génère aléatoirement toutes les cartes du UNO
  */ 
-void GenerateDeck()
+void generatePile()
 {
     int i = 0, j = 0;
     Carte cR, cB, cG, cY, cM, cM4;
@@ -30,27 +31,18 @@ void GenerateDeck()
             }
         }
         i++; j++;
-    }
+    } shuffle(); //mélange
 }
 
-int main()
+/*int main()
 {
-    GenerateDeck();
-    int Rr = 0;
-    while(!empty())
-    {
-        Carte c = pop();
-        printf("%d\n", c.Num);
-        //if (c.Num == 12) { Rr++; }
-    }
+    generatePile();
 
-    printf("----- Pile mélangé -----\n");
-    shuffle(); resetHaut();
     while(!empty())
     {
         Carte c = pop();
         printf("%d\n", c.Num);
         //if (c.Num == 12) { Rr++; }
     }
-    return 0;
+    return 0;*/
 }
