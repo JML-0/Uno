@@ -75,7 +75,7 @@ void jouer() {
         afficherCarte(carteActuelle);
 
         //Choix de la carte ou alors piocher une carte
-        do {
+        while(ok) {
             printf("\nEcrire -1 pour piocher une carte\n");
             printf("Ou alors selectionner une carte de 0 à %d en écrivant son numéro\n\nChoix : ", tailleActuelle - 1);
 
@@ -153,7 +153,7 @@ void jouer() {
                 }
 
             }
-        } while(ok);
+        }
 
         
 
@@ -177,7 +177,7 @@ void jouer() {
             else
                 joueurActuel++;
         } else {
-            if(joueurActuel - 1 <= 0)
+            if(joueurActuel - 1 < 0)
                 joueurActuel = nmbJoueurs - 1;
             else
                 joueurActuel--;
