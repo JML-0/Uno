@@ -11,7 +11,7 @@ void afficherCarte(Carte carte) ;
 int main() {
     generatePile();
 
-    Players P = addPlayer(NULL); //J1
+    /*Players P = addPlayer(NULL); //J1
     for (int i = 0; i < 2; i++) //crée 4 joueurs
         P = addPlayer(P);
     showPlayers(P);
@@ -23,9 +23,9 @@ int main() {
 
     printf("------ DELETE CARD ------\n");
     deleteCard(p1, 3);
-    showPlayers(P);
+    showPlayers(P);*/
 
-    //jouer();
+    jouer();
 }
 
 void jouer() {
@@ -57,18 +57,29 @@ void jouer() {
         afficherCarte(carteActuelle);
 
         //Choix de la carte ou alors piocher une carte
+        int ok = 1;
         do {
             printf("\nEcrire -1 pour piocher une carte\n");
             printf("Ou alors selectionner une carte de 0 à %d en écrivant son numéro\n\nChoix : ", tailleActuelle - 1);
 
             scanf("%d", &choix);
-        } while(choix <= -1 && choix >= tailleActuelle);
 
-        if(choix == -1) {
-            takeCard(tempPlayer);
-        } else {
-            //Jouer une carte
-        }
+            if(choix == -1) {
+                takeCard(tempPlayer);
+                ok = 0;
+            } else if(choix >= 0 && choix <= tailleActuelle) {
+                //Jouer une carte
+                Carte tempCarte = tempPlayer->cartes[choix];
+                if(tempCarte.color == carteActuelle.color || tempCarte.num == carteActuelle.num) {
+                    carteActuelle = tempCarte;
+                    deleteCard(tempPlayer, choix);
+
+                    ok = 0;
+                }
+            }
+        } while(ok);
+
+        
 
         //Voir s'il y a un des deux joueurs qui a gagné
         if(tempPlayer->totalCard == 0) {
