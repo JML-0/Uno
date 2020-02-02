@@ -24,3 +24,23 @@ Carte pop(void) {
 int empty(void) {
     return _haut < 0;
 }
+
+/*
+ * Mélange la pile à chaque appel
+ */
+void shuffle()
+{
+    size_t i, j;
+    Carte temp;
+
+    for (i = 0; i < PILE_MAX; i++)
+    {
+        j = i + rand() % (PILE_MAX - i);
+        
+        temp = _pile[i];
+        _pile[i] = _pile[j];
+        _pile[j] = temp;
+    }  
+}
+
+void resetHaut() { _haut = PILE_MAX; }

@@ -4,69 +4,32 @@
 #include <stdlib.h>
 #include <assert.h>
 
+/*
+ * Génère toutes les cartes du UNO
+ */ 
 void GenerateDeck()
 {
-    int i = 0;
-    for (i = 0; i < 13; i++) //Rouge
+    int i = 0, j = 0;
+    Carte cR, cB, cG, cY, cM, cM4;
+    cR.color = R; cB.color = B; cG.color = G; cY.color = Y; cM.color = M; cM.color = M4;
+
+    while (i != PILE_MAX)
     {
-        Carte carte;
-        carte.color = R;
-        carte.Num = i;
-        
-        push(carte);
-        if (i > 0)
-            push(carte);
-    }
-
-    for (int j = 0; j < 13; j++, i++) //Bleu
-    {
-        Carte carte;
-        carte.color = B;
-        carte.Num = j;
-
-        push(carte);
-        if (j > 0)
-            push(carte);
-    }
-
-    for (int j = 0; j < 13; j++, i++) //Jaune
-    {
-        Carte carte;
-        carte.color = Y;
-        carte.Num = j;
-
-        push(carte);
-        if (j > 0)
-            push(carte);
-    }
-
-    for (int j = 0; j < 13; j++, i++) //Vert
-    {
-        Carte carte;
-        carte.color = G;
-        carte.Num = j;
-
-        push(carte);
-        if (j > 0)
-            push(carte);
-    }
-
-    for (int j = 0; j < 5; j++, i++) //Multi
-    {
-        Carte carte;
-        carte.color = M;
-        carte.Num = 13;
-
-        push(carte);
-    }
-
-    for (int j = 0; j < 5; j++, i++) //+4
-    {
-        Carte carte;
-        carte.color = M4;
-        carte.Num = 14;
-
-        push(carte);
+        if (j <= 14)
+        {
+            if (j < 13)
+            {
+                cR.Num = cB.Num = cG.Num = cY.Num = j;
+                push(cR); push(cB); push(cG); push(cY);
+                if (j > 0) { push(cR); push(cB); push(cG); push(cY); }
+            }
+            else
+            {
+                cM.Num = j; cM4.Num = j;
+                push(cM); push(cM); push(cM4); push(cM4);
+            }
+        }
+        i++; j++;
     }
 }
 
@@ -77,11 +40,17 @@ int main()
     while(!empty())
     {
         Carte c = pop();
-        //printf("%d\n", c.Num);
-        if (c.Num == 0) { Rr++; }
+        printf("%d\n", c.Num);
+        //if (c.Num == 12) { Rr++; }
     }
 
-    printf("%d\n", Rr);
-    
+    printf("----- Pile mélangé -----\n");
+    shuffle(); resetHaut();
+    while(!empty())
+    {
+        Carte c = pop();
+        printf("%d\n", c.Num);
+        //if (c.Num == 12) { Rr++; }
+    }
     return 0;
 }
