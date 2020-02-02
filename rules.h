@@ -20,15 +20,16 @@ typedef struct Carte
 typedef struct Player
 {
     int id;
+    int totalCard;
     struct Carte *cartes;
-} Player;
+} *Player;
 
 /*
  * Liste des joueurs
  */
 typedef struct Players
 {
-    struct Player player;
+    struct Player *player;
     struct Players *next;
 } *Players;
 

@@ -6,8 +6,10 @@
 extern "C" {
 #endif
 
-extern Players add(Players);
+extern Players addPlayer(Players);
 extern void showPlayers(Players);
+extern void takeCard(Player);
+extern Player getPlayer(Players, int);
 
 #ifdef __cplusplus
 }
