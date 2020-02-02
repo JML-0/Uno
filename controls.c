@@ -121,20 +121,14 @@ void deleteCard(Player P, int card)
 {
     Carte *newCard = malloc(sizeof(struct Carte) * (P->totalCard - 1));
 
-    int j = 0, v = 0;
-    for (int i = 0; i < P->totalCard; i++)
+    for (int i = 0, j = 0, v = 0; i < P->totalCard; i++)
     {
         if (P->cartes[i].num != card)
-        {
             newCard[j++] = P->cartes[i];
-        }
         else
-        {
             if (v) newCard[j++] = P->cartes[i];
             else v++;
-        }
     }
-    if (j == P->totalCard) return;
     P->cartes = newCard;
     P->totalCard--;
 }
