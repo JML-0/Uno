@@ -117,7 +117,7 @@ void jouer() {
                         }
                     } while(okColor);
                     
-                    deleteCard(tempPlayer, choix);
+                    deleteCard(tempPlayer, tempCarte.num);
                     ok = 0;
                 } else {
                     if(tempCarte.color == carteActuelle.color || tempCarte.num == carteActuelle.num) {
@@ -145,7 +145,7 @@ void jouer() {
                         }
 
                         carteActuelle = tempCarte;
-                        deleteCard(tempPlayer, choix);
+                        deleteCard(tempPlayer, tempCarte.num);
 
                         ok = 0;
                     }
