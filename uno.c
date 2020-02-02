@@ -60,6 +60,7 @@ void jouer() {
             }
 
             malusPlus = 0;
+            tailleActuelle = tempPlayer->totalCard;
         }
 
         if(malusPasseTonTour) {
@@ -90,7 +91,7 @@ void jouer() {
                 if(tempCarte.num == 13) {
                     int okColor = 1, choixCouleur = 0;
                     do {
-                        printf("Tu souhaite quel couleur ? (0 = Rouge, 1 = Bleu, 2 = Vert, 3 = Jaune): ");
+                        printf("Tu souhaite quelle couleur ? (0 = Rouge, 1 = Bleu, 2 = Vert, 3 = Jaune): ");
                         scanf("%d", &choixCouleur);
 
                         switch(choixCouleur) {
