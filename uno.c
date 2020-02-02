@@ -118,37 +118,39 @@ void jouer() {
                     
                     deleteCard(tempPlayer, choix);
                     ok = 0;
-                }
+                } else {
+                    if(tempCarte.color == carteActuelle.color || tempCarte.num == carteActuelle.num) {
 
-                if(tempCarte.color == carteActuelle.color || tempCarte.num == carteActuelle.num) {
+                        switch(tempCarte.num) {
+                            case 10:
+                            printf("\n\nLe tour du prochain joueur saute\n\n");
+                            malusPasseTonTour = 1;
+                            break;
 
-                    switch(tempCarte.num) {
-                        case 10:
-                        printf("\n\nLe tour du prochain joueur saute\n\n");
-                        malusPasseTonTour = 1;
-                        break;
+                            case 11:
+                            printf("\n\n*voix de forain* Allez allleezzz, on change de sennnsss !!\n\n");
+                            sensNormal = !sensNormal;
+                            break;
 
-                        case 11:
-                        printf("\n\n*voix de forain* Allez allleezzz, on change de sennnsss !!\n\n");
-                        sensNormal = !sensNormal;
-                        break;
+                            case 12:
+                            printf("\n\nAllez hop, le prochain joueur mange 2 cartes\n\n");
+                            malusPlus = 2;
+                            break;
 
-                        case 12:
-                        printf("\n\nAllez hop, le prochain joueur mange 2 cartes\n\n");
-                        malusPlus = 2;
-                        break;
+                            case 14:
+                            printf("\n\nAllez hop, le prochain joueur mange 4 cartes\n\n");
+                            malusPlus = 4;
+                            break;
+                        }
 
-                        case 14:
-                        printf("\n\nAllez hop, le prochain joueur mange 4 cartes\n\n");
-                        malusPlus = 4;
-                        break;
+                        carteActuelle = tempCarte;
+                        deleteCard(tempPlayer, choix);
+
+                        ok = 0;
                     }
 
-                    carteActuelle = tempCarte;
-                    deleteCard(tempPlayer, choix);
-
-                    ok = 0;
                 }
+
             }
         } while(ok);
 
