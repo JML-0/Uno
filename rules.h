@@ -1,8 +1,7 @@
 #ifndef _RULES_H
 #define _RULES_H
 
-#define LENGTH 8
-#define WIDTH 8
+#define NBCARTES 7
 
 typedef enum Color
 {
@@ -11,9 +10,27 @@ typedef enum Color
 
 typedef struct Carte
 {
-  Color color;
-  int Num;
+  enum Color color;
+  int num;
 } Carte;
+
+/*
+ * Données d'un joueur
+ */
+typedef struct Player
+{
+    int id;
+    struct Carte *cartes;
+} Player;
+
+/*
+ * Liste des joueurs
+ */
+typedef struct Players
+{
+    struct Player player;
+    struct Players *next;
+} *Players;
 
 extern void generatePile(void);
 

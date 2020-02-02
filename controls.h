@@ -6,7 +6,8 @@
 extern "C" {
 #endif
 
-extern void melanger();
+extern Players add(Players);
+extern void showPlayers(Players);
 
 #ifdef __cplusplus
 }

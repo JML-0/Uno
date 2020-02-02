@@ -1,5 +1,6 @@
 #include "pile.h"
 #include "rules.h"
+#include "controls.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -7,10 +8,16 @@ void jouer();
 void creerLeDeck(Carte* deck, int* taille);
 void afficherLeDeck(Carte* deck, int taille);
 
-void main() {
+int main() {
     generatePile();
 
-    jouer();
+    Players P = add(NULL); //J1
+    for (int i = 0; i < 5; i++) //crée 4 joueurs
+        P = add(P);
+    
+    showPlayers(P);
+
+    //jouer();
 }
 
 void jouer() {
@@ -95,7 +102,7 @@ void afficherLeDeck(Carte* deck, int taille) {
             break;
         }
 
-        printf("\n(%d) %d - %s", i, deck[i].Num, couleur);
+        printf("\n(%d) %d - %s", i, deck[i].num, couleur);
     }
 }
 

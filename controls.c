@@ -1,10 +1,35 @@
 #include "pile.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
-void melanger()
+int ID = 0;
+Players add(Players P)
 {
-    int i = 0, randomValue = (int)(rand() / (double)RAND_MAX * (25 - 1));
-    while (i != randomValue) { shuffle(); i++; }
-    printf("r---->%d\n", randomValue);
+    Player newPlayer;
+    
+    newPlayer.id = ID++;
+    newPlayer.cartes = malloc(sizeof(struct Carte) * NBCARTES); assert(newPlayer.cartes);
+    for (int i = 0; i < 7; i++)
+        newPlayer.cartes[i] = pop();
+
+    Players p = malloc(sizeof(struct Players)); assert(p);
+    p->player = newPlayer;
+    p->next = P;
+
+    return p;
+}
+
+void showPlayers(Players P)
+{
+    Players tmp = P;
+    while (tmp != NULL)
+    {
+        Player p = tmp->player;
+        printf("ID : %d \nCartes:\n", p.id);
+        for (int i = 0; i < 7; i++)
+            printf("%d\n", p.cartes[i].num);
+        
+        tmp= tmp->next;
+    }
 }

@@ -20,29 +20,16 @@ void generatePile()
         {
             if (j < 13)
             {
-                cR.Num = cB.Num = cG.Num = cY.Num = j;
+                cR.num = cB.num = cG.num = cY.num = j;
                 push(cR); push(cB); push(cG); push(cY);
                 if (j > 0) { push(cR); push(cB); push(cG); push(cY); }
             }
             else
             {
-                cM.Num = j; cM4.Num = j;
+                cM.num = j; cM4.num = j;
                 push(cM); push(cM); push(cM4); push(cM4);
             }
         }
         i++; j++;
     } shuffle(); //mélange
 }
-
-/*int main()
-{
-    generatePile();
-
-    while(!empty())
-    {
-        Carte c = pop();
-        printf("%d\n", c.Num);
-        //if (c.Num == 12) { Rr++; }
-    }
-    return 0;
-}*/
