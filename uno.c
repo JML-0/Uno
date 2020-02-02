@@ -11,19 +11,21 @@ void afficherCarte(Carte carte) ;
 int main() {
     generatePile();
 
-    /*Players P = addPlayer(NULL); //J1
+    Players P = addPlayer(NULL); //J1
     for (int i = 0; i < 2; i++) //crée 4 joueurs
         P = addPlayer(P);
-    
     showPlayers(P);
 
     printf("------ PIOCHE ------\n");
     Player p1 = getPlayer(P, 0);
     takeCard(p1);
+    showPlayers(P);
 
-    showPlayers(P);*/
+    printf("------ DELETE CARD ------\n");
+    deleteCard(p1, 3);
+    showPlayers(P);
 
-    jouer();
+    //jouer();
 }
 
 void jouer() {

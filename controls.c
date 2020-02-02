@@ -25,6 +25,32 @@ Players addPlayer(Players P)
 }
 
 /*
+ * Supprime un joueur
+ */ 
+Players removePlayer(Players P, Player N)
+{
+    if (P->player == N)
+    {
+        Players r = P->next;
+        free(P->player->cartes); free(P);
+        return r;
+    }
+    Players courant = P, prec = P;
+    while (courant != NULL)
+    {
+        if (courant->player == N)
+        {
+            prec->next = courant->next;
+            free(courant->player->cartes); free(courant);
+            return P;
+        }
+        prec = courant;
+        courant = courant->next;
+    }
+    return P;
+}
+
+/*
  * Affiche les joueurs et leurs infos
  */ 
 void showPlayers(Players P)
@@ -85,4 +111,24 @@ void plusX(Player P, int n)
 {
     int i = 0;
     while (i != n) { takeCard(P); i++; }
+}
+
+/*
+ * Supprime une carte du joueur P
+ * card : numéro de carte à supprimer
+ */ 
+void deleteCard(Player P, int card)
+{
+    Carte *newCard = malloc(sizeof(struct Carte) * (P->totalCard - 1));
+
+    for (int i = 0, j = 0; i < P->totalCard; i++)
+    {
+        if (P->cartes[i].num != card)
+        {
+            newCard[j].num =        P->cartes[i].num;
+            newCard[j++].color =    P->cartes[i].color;
+        }
+    }
+    P->cartes = newCard;
+    P->totalCard--;
 }

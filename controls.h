@@ -10,6 +10,8 @@ extern Players addPlayer(Players);
 extern void showPlayers(Players);
 extern void takeCard(Player);
 extern Player getPlayer(Players, int);
+extern Players removePlayer(Players, Player);
+extern void deleteCard(Player, int);
 
 #ifdef __cplusplus
 }
