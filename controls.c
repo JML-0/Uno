@@ -119,7 +119,7 @@ void plusX(Player P, int n)
  */ 
 void deleteCard(Player P, int card)
 {
-    Carte *newCard = malloc(sizeof(struct Carte) * (P->totalCard - 1));
+    Carte *newCard = malloc(sizeof(struct Carte) * (P->totalCard - 1)); assert(newCard);
 
     for (int i = 0, j = 0, v = 0; i < P->totalCard; i++)
     {
@@ -129,6 +129,7 @@ void deleteCard(Player P, int card)
             if (v) newCard[j++] = P->cartes[i];
             else v++;
     }
+    free(P->cartes);
     P->cartes = newCard;
     P->totalCard--;
 }
