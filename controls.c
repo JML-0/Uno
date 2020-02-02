@@ -67,3 +67,22 @@ Player getPlayer(Players P, int id)
     }
     return p;
 }
+
+/*
+ * Retourne 1 si le joueur n'a plus de carte, sinon 0
+ */ 
+int zeroCard(Player P)
+{
+    if (P->totalCard) return 0;
+    return 1;
+}
+
+/*
+ * Fait piocher X carte(s) au joueur P
+ * n : carte à piocher en fonction de plusieurs +2 / +4 posés
+ */ 
+void plusX(Player P, int n)
+{
+    int i = 0;
+    while (i != n) { takeCard(P); i++; }
+}
