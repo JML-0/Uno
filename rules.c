@@ -44,5 +44,5 @@ void generatePile()
         printf("%d\n", c.Num);
         //if (c.Num == 12) { Rr++; }
     }
-    return 0;*/
-}
+    return 0;
+}*/

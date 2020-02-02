@@ -33,10 +33,11 @@ void jouer() {
 
         do {
             printf("Ecrire -1 pour piocher une carte\n");
-            printf("Ou alors selectionner une carte en écrivant son numéro\n");
+            printf("Ou alors selectionner une carte de 0 à %d en écrivant son numéro\n", tailleActuelle);
 
             scanf("%d", &choix);
-        } while(choix >= -1 && choix <= tailleActuelle);
+            printf("\n%d", choix);
+        } while(choix <= -1 && choix >= tailleActuelle);
 
         if(joueurActuel == 1)
             joueurActuel = 2;
