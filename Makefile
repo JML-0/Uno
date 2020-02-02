@@ -1,5 +1,5 @@
 CC = gcc
-SRC = rules.c pile.c controls.c
+SRC = rules.c pile.c controls.c uno.c
 OBJ = $(SRC:.c=.o)
 HEADERS = rules.h pile.h controls.h
 CFLAGS = -Wall
