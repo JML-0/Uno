@@ -42,6 +42,7 @@ void jouer() {
 
     int joueurActuel = 0; //ID du joueur actuel
     int sensNormal = 1; //Sens du jeu
+    int malusPlus = 0, malusPasseTonTour = 0; //Les malus à executer au prochain joueur
     Carte carteActuelle = pop(); //La carte dernièrement posé
     Player tempPlayer;
 
@@ -49,7 +50,23 @@ void jouer() {
         printf("C'est au joueur %d de jouer !\n", joueurActuel);
         tempPlayer = getPlayer(P, joueurActuel);
 
-        int choix = 0, tailleActuelle = tempPlayer->totalCard;
+        int choix = 0, ok = 1, tailleActuelle = tempPlayer->totalCard;
+
+        //Application des malus
+        if(malusPlus > 0) {
+            printf("\n\nRajout de %d cartes dans ton deck\n\n", malusPlus);
+            for(int i = 0; i < malusPlus; i++) {
+                takeCard(tempPlayer);
+            }
+
+            malusPlus = 0;
+        }
+
+        if(malusPasseTonTour) {
+            printf("\n\nDéso pas déso, ton tour saute\n\n");
+            ok = 0;
+            malusPasseTonTour = 0;
+        }
 
         afficherLeDeck(tempPlayer->cartes, tailleActuelle);
 
@@ -57,7 +74,6 @@ void jouer() {
         afficherCarte(carteActuelle);
 
         //Choix de la carte ou alors piocher une carte
-        int ok = 1;
         do {
             printf("\nEcrire -1 pour piocher une carte\n");
             printf("Ou alors selectionner une carte de 0 à %d en écrivant son numéro\n\nChoix : ", tailleActuelle - 1);
@@ -70,7 +86,64 @@ void jouer() {
             } else if(choix >= 0 && choix <= tailleActuelle) {
                 //Jouer une carte
                 Carte tempCarte = tempPlayer->cartes[choix];
+
+                if(tempCarte.num == 13) {
+                    int okColor = 1, choixCouleur = 0;
+                    do {
+                        printf("Tu souhaite quel couleur ? (0 = Rouge, 1 = Bleu, 2 = Vert, 3 = Jaune): ");
+                        scanf("%d", &choixCouleur);
+
+                        switch(choixCouleur) {
+                            case 0:
+                            carteActuelle.color = R;
+                            okColor = 0;
+                            break;
+
+                            case 1:
+                            carteActuelle.color = B;
+                            okColor = 0;
+                            break;
+
+                            case 2:
+                            carteActuelle.color = G;
+                            okColor = 0;
+                            break;
+
+                            case 3:
+                            carteActuelle.color = Y;
+                            okColor = 0;
+                            break;
+                        }
+                    } while(okColor);
+                    
+                    deleteCard(tempPlayer, choix);
+                    ok = 0;
+                }
+
                 if(tempCarte.color == carteActuelle.color || tempCarte.num == carteActuelle.num) {
+
+                    switch(tempCarte.num) {
+                        case 10:
+                        printf("\n\nLe tour du prochain joueur saute\n\n");
+                        malusPasseTonTour = 1;
+                        break;
+
+                        case 11:
+                        printf("\n\n*voix de forain* Allez allleezzz, on change de sennnsss !!\n\n");
+                        sensNormal = !sensNormal;
+                        break;
+
+                        case 12:
+                        printf("\n\nAllez hop, le prochain joueur mange 2 cartes\n\n");
+                        malusPlus = 2;
+                        break;
+
+                        case 14:
+                        printf("\n\nAllez hop, le prochain joueur mange 4 cartes\n\n");
+                        malusPlus = 4;
+                        break;
+                    }
+
                     carteActuelle = tempCarte;
                     deleteCard(tempPlayer, choix);
 
@@ -84,7 +157,14 @@ void jouer() {
         //Voir s'il y a un des deux joueurs qui a gagné
         if(tempPlayer->totalCard == 0) {
             printf("Bravo joueur %d, tu as gagné !\n", joueurActuel);
-            break;
+            removePlayer(P, tempPlayer);
+            nmbJoueurs--;
+
+            if(nmbJoueurs == 1) {
+                printf("\n\n=== FIN DE PARTIE ===");
+                break;
+            }
+                
         }
 
         //Changement de joueur pour le tour suivant
