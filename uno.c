@@ -40,6 +40,8 @@ void jouer() {
     for (int i = 0; i < nmbJoueurs; i++) //crée x joueurs
         P = addPlayer(P);
 
+    int iWin = 0;
+    int winTab[nmbJoueurs];
     int joueurActuel = 0; //ID du joueur actuel
     int sensNormal = 1; //Sens du jeu
     int malusPlus = 0, malusPasseTonTour = 0; //Les malus à executer au prochain joueur
@@ -156,11 +158,17 @@ void jouer() {
         //Voir s'il y a un des deux joueurs qui a gagné
         if(zeroCard(tempPlayer)) {
             printf("Bravo joueur %d, tu as gagné !\n", joueurActuel);
+            winTab[iWin++] = joueurActuel;
             removePlayer(P, tempPlayer);
             nmbJoueurs--;
 
             if(nmbJoueurs == 1) {
+                int i;
+                winTab[iWin] = P->player->id;
                 printf("\n\n=== FIN DE PARTIE ===");
+                for(i = 0; i <= iWin; i++)
+                    printf("    %d - Joueur %d\n", i+1, winTab[i]);
+                printf("\n");
                 break;
             }
                 
