@@ -37,7 +37,7 @@ void jouer() {
         scanf("%d", &nmbJoueurs);
     } while(nmbJoueurs <= 0);
 
-    for (int i = 0; i < nmbJoueurs; i++) //crée 4 joueurs
+    for (int i = 0; i < nmbJoueurs; i++) //crée x joueurs
         P = addPlayer(P);
 
     int joueurActuel = 0; //ID du joueur actuel
@@ -55,9 +55,7 @@ void jouer() {
         //Application des malus
         if(malusPlus > 0) {
             printf("\n\nRajout de %d cartes dans ton deck\n\n", malusPlus);
-            for(int i = 0; i < malusPlus; i++) {
-                takeCard(tempPlayer);
-            }
+            plusX(tempPlayer, malusPlus);
 
             malusPlus = 0;
             tailleActuelle = tempPlayer->totalCard;
@@ -156,7 +154,7 @@ void jouer() {
         }
 
         //Voir s'il y a un des deux joueurs qui a gagné
-        if(tempPlayer->totalCard == 0) {
+        if(zeroCard(tempPlayer)) {
             printf("Bravo joueur %d, tu as gagné !\n", joueurActuel);
             removePlayer(P, tempPlayer);
             nmbJoueurs--;
