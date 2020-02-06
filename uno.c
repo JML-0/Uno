@@ -88,7 +88,7 @@ void jouer() {
                 //Jouer une carte
                 Carte tempCarte = tempPlayer->cartes[choix];
 
-                if(tempCarte.num == 13) {
+                if(tempCarte.num == 13 || tempCarte.num == 14) {
                     int okColor = 1, choixCouleur = 0;
                     do {
                         printf("Tu souhaite quelle couleur ? (0 = Rouge, 1 = Bleu, 2 = Vert, 3 = Jaune): ");
@@ -117,6 +117,11 @@ void jouer() {
                         }
                     } while(okColor);
                     
+                    if(tempCarte.num == 14) {
+                        printf("\n\nAllez hop, le prochain joueur mange 4 cartes\n\n");
+                        malusPlus = 4;
+                    }
+
                     deleteCard(tempPlayer, tempCarte.num);
                     ok = 0;
                 } else {
@@ -137,11 +142,6 @@ void jouer() {
                             printf("\n\nAllez hop, le prochain joueur mange 2 cartes\n\n");
                             malusPlus = 2;
                             break;
-
-                            case 14:
-                            printf("\n\nAllez hop, le prochain joueur mange 4 cartes\n\n");
-                            malusPlus = 4;
-                            break;
                         }
 
                         carteActuelle = tempCarte;
@@ -154,8 +154,6 @@ void jouer() {
 
             }
         }
-
-        
 
         //Voir s'il y a un des deux joueurs qui a gagné
         if(tempPlayer->totalCard == 0) {
@@ -226,7 +224,7 @@ void afficherLeDeck(Carte* deck, int taille) {
             break;
 
             case 14:
-            printf("\n(%d) Carte +4 - %s", i, couleur);
+            printf("\n(%d) Carte +4", i);
             break;
 
             default:
