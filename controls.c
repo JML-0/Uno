@@ -95,6 +95,24 @@ Player getPlayer(Players P, int id)
 }
 
 /*
+ * Retourne un joueur depuis sa position dans la structure
+ */ 
+Player getPlayerFromPosition(Players P, int pos)
+{
+    Players tmp = P; Player p;
+    int i = 0;
+    while (tmp != NULL)
+    {
+        p = tmp->player;
+        if (i == pos) break;
+
+        tmp = tmp->next;
+        i++;
+    }
+    return p;
+}
+
+/*
  * Retourne 1 si le joueur n'a plus de carte, sinon 0
  */ 
 int zeroCard(Player P)

@@ -12,6 +12,7 @@ extern void takeCard(Player);
 extern Player getPlayer(Players, int);
 extern Players removePlayer(Players, Player);
 extern void deleteCard(Player, int);
+extern Player getPlayerFromPosition(Players P, int pos);
 
 #ifdef __cplusplus
 }

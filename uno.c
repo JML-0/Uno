@@ -48,9 +48,13 @@ void jouer() {
     Carte carteActuelle = pop(); //La carte dernièrement posé
     Player tempPlayer;
 
+    //Si la carte pioché par défaut est "changement de couleur", alors il faut repiocher jusqu'à avoir une autre carte
+    /*while(carteActuelle.num == 13)
+        carteActuelle = pop();*/
+
     while(1) {
         printf("C'est au joueur %d de jouer !\n", joueurActuel);
-        tempPlayer = getPlayer(P, joueurActuel);
+        tempPlayer = getPlayerFromPosition(P, joueurActuel);
 
         int choix = 0, ok = 1, tailleActuelle = tempPlayer->totalCard;
 
