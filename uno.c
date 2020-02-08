@@ -48,9 +48,9 @@ void jouer() {
     Carte carteActuelle = pop(); //La carte dernièrement posé
     Player tempPlayer;
 
-    //Si la carte pioché par défaut est "changement de couleur", alors il faut repiocher jusqu'à avoir une autre carte
-    /*while(carteActuelle.num == 13)
-        carteActuelle = pop();*/
+    //Si la carte pioché par défaut est "changement de couleur" ou "carte +4", alors il faut repiocher jusqu'à avoir une autre carte
+    while(carteActuelle.num == 13 || carteActuelle.num == 14)
+        carteActuelle = pop();
 
     while(1) {
         printf("C'est au joueur %d de jouer !\n", joueurActuel);
@@ -284,7 +284,7 @@ void afficherCarte(Carte carte) {
             break;
 
             case 14:
-            printf("Carte +4 - %s\n", couleur);
+            printf("Carte +4\n");
             break;
 
             default:
