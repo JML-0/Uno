@@ -126,6 +126,8 @@ void jouer() {
                         malusPlus = 4;
                     }
 
+                    push(tempCarte);
+                    shuffle();
                     deleteCard(tempPlayer, tempCarte.num);
                     ok = 0;
                 } else {
@@ -149,6 +151,8 @@ void jouer() {
                         }
 
                         carteActuelle = tempCarte;
+                        push(tempCarte);
+                        shuffle();
                         deleteCard(tempPlayer, tempCarte.num);
 
                         ok = 0;
