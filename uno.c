@@ -166,7 +166,7 @@ void jouer() {
         //Voir s'il y a un des deux joueurs qui a gagné
         if(zeroCard(tempPlayer)) {
             printf("Bravo joueur %d, tu as gagné !\n", tempPlayer->id);
-            winTab[iWin++] = tempPlayer->id;
+            winTab[iWin++] = joueurActuel;
             removePlayer(P, tempPlayer);
             nmbJoueurs--;
 
