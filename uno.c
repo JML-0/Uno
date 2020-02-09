@@ -35,7 +35,7 @@ void jouer() {
         printf("Bienvenue sur UNO ! Combien de joueurs êtes vous : ");
 
         scanf("%d", &nmbJoueurs);
-    } while(nmbJoueurs <= 0);
+    } while(nmbJoueurs <= 1);
 
     for (int i = 0; i < nmbJoueurs; i++) //crée x joueurs
         P = addPlayer(P);
