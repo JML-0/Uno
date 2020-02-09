@@ -168,8 +168,8 @@ void jouer() {
 
             if(nmbJoueurs == 1) {
                 int i;
-                winTab[iWin] = P->player->id;
-                printf("\n\n=== FIN DE PARTIE ===");
+                winTab[iWin] = tempPlayer->id;
+                printf("\n\n=== FIN DE PARTIE ===\n");
                 for(i = 0; i <= iWin; i++)
                     printf("    %d - Joueur %d\n", i+1, winTab[i]);
                 printf("\n");
