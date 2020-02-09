@@ -30,12 +30,12 @@ int main() {
 
 void jouer() {
     Players P;
-    int nmbJoueurs = 0;
-    do {
+    int nmbJoueurs = 2;
+    /*do {
         printf("Bienvenue sur UNO ! Combien de joueurs êtes vous : ");
 
         scanf("%d", &nmbJoueurs);
-    } while(nmbJoueurs <= 1);
+    } while(nmbJoueurs <= 1);*/
 
     for (int i = 0; i < nmbJoueurs; i++) //crée x joueurs
         P = addPlayer(P);
@@ -54,6 +54,17 @@ void jouer() {
 
     while(1) {
         tempPlayer = getPlayerFromPosition(P, joueurActuel);
+
+        if(nmbJoueurs == 1) {
+                int i;
+                winTab[iWin++] = tempPlayer->id;
+                printf("\n\n=== FIN DE PARTIE ===\n");
+                for(i = 0; i < iWin; i++)
+                    printf("    %d - Joueur %d\n", i+1, winTab[i]);
+                printf("\n");
+                break;
+            }
+
         printf("C'est au joueur %d de jouer !\n", tempPlayer->id);
 
         int choix = 0, ok = 1, tailleActuelle = tempPlayer->totalCard;
@@ -165,25 +176,16 @@ void jouer() {
 
         //Voir s'il y a un des deux joueurs qui a gagné
         if(zeroCard(tempPlayer)) {
-            printf("Bravo joueur %d, tu as gagné !\n", tempPlayer->id);
-            winTab[iWin++] = joueurActuel;
-            removePlayer(P, tempPlayer);
             nmbJoueurs--;
-
-            if(nmbJoueurs == 1) {
-                int i;
-                winTab[iWin] = tempPlayer->id;
-                printf("\n\n=== FIN DE PARTIE ===\n");
-                for(i = 0; i <= iWin; i++)
-                    printf("    %d - Joueur %d\n", i+1, winTab[i]);
-                printf("\n");
-                break;
-            }
+            printf("Bravo joueur %d, tu as gagné !\n", tempPlayer->id);
+            winTab[iWin++] = tempPlayer->id;
+            
+            removePlayer(P, tempPlayer);
                 
         }
 
         //Changement de joueur pour le tour suivant
-        if(sensNormal) {
+        /*if(sensNormal) {
             if(joueurActuel + 1 >= nmbJoueurs)
                 joueurActuel = 0;
             else
@@ -193,8 +195,9 @@ void jouer() {
                 joueurActuel = nmbJoueurs - 1;
             else
                 joueurActuel--;
-        }
+        }*/
         
+        joueurActuel = !joueurActuel;
     }
 }
 
