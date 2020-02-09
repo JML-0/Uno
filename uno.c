@@ -53,8 +53,8 @@ void jouer() {
         carteActuelle = pop();
 
     while(1) {
-        printf("C'est au joueur %d de jouer !\n", joueurActuel);
         tempPlayer = getPlayerFromPosition(P, joueurActuel);
+        printf("C'est au joueur %d de jouer !\n", tempPlayer->id);
 
         int choix = 0, ok = 1, tailleActuelle = tempPlayer->totalCard;
 
@@ -165,8 +165,8 @@ void jouer() {
 
         //Voir s'il y a un des deux joueurs qui a gagné
         if(zeroCard(tempPlayer)) {
-            printf("Bravo joueur %d, tu as gagné !\n", joueurActuel);
-            winTab[iWin++] = joueurActuel;
+            printf("Bravo joueur %d, tu as gagné !\n", tempPlayer->id);
+            winTab[iWin++] = tempPlayer->id;
             removePlayer(P, tempPlayer);
             nmbJoueurs--;
 
