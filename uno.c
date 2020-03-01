@@ -3,6 +3,7 @@
 #include "controls.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 void jouer();
 void afficherLeDeck(Carte* deck, int taille);
@@ -25,7 +26,39 @@ int main() {
     deleteCard(p1, 3);
     showPlayers(P);*/
 
-    jouer();
+ 	menu();
+}
+
+//  Le menu du jeu 
+void menu(){
+ int menuX;
+     
+        printf(" ***************************************************************                                                UNO                          \n   1)		1 VS 1  \n   2)		1 VS IA \n \n  *************************************************************** \n");
+    printf("taper le chifre qui vous convient entre 1 et 2:");
+
+        scanf("%d", &menuX);
+	
+	switch( menuX){
+case 1:
+clearScreen();
+jouer();
+break;
+case 2:
+clearScreen();
+printf(" il faut metre l'IA a cette endroit");
+break;
+default:
+break;
+}	
+}
+
+
+// permet de clear pour avoir un terminal plus propre
+
+void clearScreen()
+{
+  const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
+  write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
 }
 
 void jouer() {
@@ -65,6 +98,7 @@ void jouer() {
                 break;
             }
 
+        clearScreen();
         printf("C'est au joueur %d de jouer !\n", tempPlayer->id);
 
         int choix = 0, ok = 1, tailleActuelle = tempPlayer->totalCard;
