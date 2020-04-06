@@ -1,8 +1,5 @@
-#include "rules.h"
 #ifndef _PILE_H
 #define _PILE_H
-/*!\brief taille de la pile (statique) */
-#define PILE_MAX 108
 
 #ifdef __cplusplus
 extern "C" {

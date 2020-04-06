@@ -1,4 +1,5 @@
-#include "pile.h"
+#include "rules.h"
+#include "controls.h"
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
