@@ -137,8 +137,13 @@ void jouer() {
                 //Jouer une carte
                 Carte tempCarte = tempPlayer->cartes[choix];
 
-                if(tempCarte.num == 13 || tempCarte.num == 14) {
-                    int okColor = 1, choixCouleur = 0;
+                    if(tempCarte.num == 13 || tempCarte.num == 14) {
+                    int okColor = 1, choixCouleur = 0; int tmpNum;
+                    if(tempCarte.num == 13){
+                        tmpNum = 13;
+                    } else {
+                        tmpNum = 14;
+                    }
                     do {
                         printf("Tu souhaite quelle couleur ? (0 = Rouge, 1 = Bleu, 2 = Vert, 3 = Jaune): ");
                         scanf("%d", &choixCouleur);
@@ -146,21 +151,25 @@ void jouer() {
                         switch(choixCouleur) {
                             case 0:
                             carteActuelle.color = R;
+                            carteActuelle.num = tmpNum;
                             okColor = 0;
                             break;
 
                             case 1:
                             carteActuelle.color = B;
+                            carteActuelle.num = tmpNum;
                             okColor = 0;
                             break;
 
                             case 2:
                             carteActuelle.color = G;
+                            carteActuelle.num = tmpNum;
                             okColor = 0;
                             break;
 
                             case 3:
                             carteActuelle.color = Y;
+                            carteActuelle.num = tmpNum;
                             okColor = 0;
                             break;
                         }
@@ -321,11 +330,11 @@ void afficherCarte(Carte carte) {
             break;
 
             case 13:
-            printf("Carte changement de couleur\n");
+            printf("Carte changement de couleur - %s \n",couleur);
             break;
 
             case 14:
-            printf("Carte +4\n");
+            printf("Carte +4  - %s \n",couleur);
             break;
 
             default:
