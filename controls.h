@@ -5,7 +5,6 @@
 extern "C" {
 #endif
 
-int ID = 0;
 
 typedef enum Color
 {
@@ -38,12 +37,12 @@ typedef struct Players
 } *Players;
 
 extern void generatePile(void);
-extern Players addPlayer(Players);
-extern void showPlayers(Players);
-extern void takeCard(Player);
-extern Player getPlayer(Players, int);
-extern Players removePlayer(Players, Player);
-extern void deleteCard(Player, int);
+extern Players addPlayer(Players P);
+extern void showPlayers(Players P);
+extern void takeCard(Player P);
+extern Player getPlayer(Players P, int id);
+extern Players removePlayer(Players P, Player N);
+extern void deleteCard(Player P, int card);
 extern Player getPlayerFromPosition(Players P, int pos);
 
 #ifdef __cplusplus

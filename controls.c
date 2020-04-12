@@ -1,10 +1,12 @@
+
+#include "controls.h"
 #include "pile.h"
 #include "rules.h"
-#include "controls.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
+int ID = 0;
 /*
  * Génère aléatoirement toutes les cartes du UNO
  */ 

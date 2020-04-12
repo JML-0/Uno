@@ -1,13 +1,16 @@
+#include "controls.h"
 #include "pile.h"
 #include "rules.h"
-#include "controls.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-void jouer();
+void jouer(int nbJoueur);
 void afficherLeDeck(Carte* deck, int taille);
-void afficherCarte(Carte carte) ;
+void afficherCarte(Carte carte);
+void reverse(int * list , int nb);
+void menu();
 
 int main() {
     generatePile();
@@ -26,69 +29,45 @@ int main() {
     deleteCard(p1, 3);
     showPlayers(P);*/
 
- 	menu();
+    menu();
 }
 
 //  Le menu du jeu 
 void menu(){
- int menuX;
-     
-        printf(" ***************************************************************                                                UNO                          \n   1)		1 VS 1  \n   2)		1 VS IA \n \n  *************************************************************** \n");
-    printf("taper le chifre qui vous convient entre 1 et 2:");
-
-        scanf("%d", &menuX);
-	
-	switch( menuX){
-case 1:
-clearScreen();
-jouer();
-break;
-case 2:
-clearScreen();
-printf(" il faut metre l'IA a cette endroit");
-break;
-default:
-break;
-}	
+    int nbjoueur = 0;
+    printf("\nNombre de joueurs : ");
+    scanf("%d",&nbjoueur);
+    //clearScreen();
+    jouer(nbjoueur);
 }
 
 
 // permet de clear pour avoir un terminal plus propre
 
-void clearScreen()
-{
-  const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
-  write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
-}
+void jouer(int nbJoueurs) {
+    Players P = NULL;
 
-void jouer() {
-    Players P;
-    int nmbJoueurs = 2;
-    /*do {
-        printf("Bienvenue sur UNO ! Combien de joueurs êtes vous : ");
-
-        scanf("%d", &nmbJoueurs);
-    } while(nmbJoueurs <= 1);*/
-
-    for (int i = 0; i < nmbJoueurs; i++) //crée x joueurs
+    for (int i = 0; i < nbJoueurs; i++) //crée x joueurs
         P = addPlayer(P);
 
     int iWin = 0;
-    int winTab[nmbJoueurs];
+    int winTab[nbJoueurs];
+
     int joueurActuel = 0; //ID du joueur actuel
+    int joueurCompteur = 0;
     int sensNormal = 1; //Sens du jeu
     int malusPlus = 0, malusPasseTonTour = 0; //Les malus à executer au prochain joueur
+
     Carte carteActuelle = pop(); //La carte dernièrement posé
     Player tempPlayer;
-
     //Si la carte pioché par défaut est "changement de couleur" ou "carte +4", alors il faut repiocher jusqu'à avoir une autre carte
     while(carteActuelle.num == 13 || carteActuelle.num == 14)
         carteActuelle = pop();
 
     while(1) {
-        tempPlayer = getPlayerFromPosition(P, joueurActuel);
-
-        if(nmbJoueurs == 1) {
+        //showPlayers(P);
+        tempPlayer = getPlayer(P, joueurActuel);
+        if(nbJoueurs == 1) {
                 int i;
                 winTab[iWin++] = tempPlayer->id;
                 printf("\n\n=== FIN DE PARTIE ===\n");
@@ -98,7 +77,6 @@ void jouer() {
                 break;
             }
 
-        clearScreen();
         printf("C'est au joueur %d de jouer !\n", tempPlayer->id);
 
         int choix = 0, ok = 1, tailleActuelle = tempPlayer->totalCard;
@@ -107,22 +85,24 @@ void jouer() {
         if(malusPlus > 0) {
             printf("\n\nRajout de %d cartes dans ton deck\n\n", malusPlus);
             plusX(tempPlayer, malusPlus);
-
-            malusPlus = 0;
+            ok = 0;
             tailleActuelle = tempPlayer->totalCard;
         }
 
         if(malusPasseTonTour) {
             printf("\n\nDéso pas déso, ton tour saute\n\n");
             ok = 0;
-            malusPasseTonTour = 0;
+            
         }
 
-        afficherLeDeck(tempPlayer->cartes, tailleActuelle);
-
-        printf("\n\nDernière carte jouer : ");
-        afficherCarte(carteActuelle);
-
+        if(malusPlus || malusPasseTonTour){
+            malusPasseTonTour = 0;
+            malusPlus = 0;
+        } else {
+            afficherLeDeck(tempPlayer->cartes, tailleActuelle);
+            printf("\n\nDernière carte jouer : ");
+            afficherCarte(carteActuelle);
+        }
         //Choix de la carte ou alors piocher une carte
         while(ok) {
             printf("\nEcrire -1 pour piocher une carte\n");
@@ -133,11 +113,12 @@ void jouer() {
             if(choix == -1) {
                 takeCard(tempPlayer);
                 ok = 0;
+                joueurCompteur++;
             } else if(choix >= 0 && choix <= tailleActuelle) {
                 //Jouer une carte
                 Carte tempCarte = tempPlayer->cartes[choix];
-
-                    if(tempCarte.num == 13 || tempCarte.num == 14) {
+                joueurCompteur++;
+                if(tempCarte.num == 13 || tempCarte.num == 14) {
                     int okColor = 1, choixCouleur = 0; int tmpNum;
                     if(tempCarte.num == 13){
                         tmpNum = 13;
@@ -176,10 +157,10 @@ void jouer() {
                     } while(okColor);
                     
                     if(tempCarte.num == 14) {
-                        printf("\n\nAllez hop, le prochain joueur mange 4 cartes\n\n");
+                        printf("\n\nLe prochain joueur prend 4 cartes\n\n");
                         malusPlus = 4;
                     }
-
+                    printf("La +4");
                     push(tempCarte);
                     shuffle();
                     deleteCard(tempPlayer, tempCarte.num);
@@ -189,17 +170,17 @@ void jouer() {
 
                         switch(tempCarte.num) {
                             case 10:
-                            printf("\n\nLe tour du prochain joueur saute\n\n");
+                            printf("\n\nLe tour du prochain joueur saute.\n\n");
                             malusPasseTonTour = 1;
                             break;
 
                             case 11:
-                            printf("\n\n*voix de forain* Allez allleezzz, on change de sennnsss !!\n\n");
+                            printf("\n\nChangement de sens.\n\n");
                             sensNormal = !sensNormal;
                             break;
 
                             case 12:
-                            printf("\n\nAllez hop, le prochain joueur mange 2 cartes\n\n");
+                            printf("\n\nLe prochain joueur prend 2 cartes.\n\n");
                             malusPlus = 2;
                             break;
                         }
@@ -216,31 +197,28 @@ void jouer() {
 
             }
         }
-
         //Voir s'il y a un des deux joueurs qui a gagné
         if(zeroCard(tempPlayer)) {
-            nmbJoueurs--;
+            nbJoueurs--;
             printf("Bravo joueur %d, tu as gagné !\n", tempPlayer->id);
             winTab[iWin++] = tempPlayer->id;
             
             removePlayer(P, tempPlayer);
                 
         }
-
         //Changement de joueur pour le tour suivant
-        /*if(sensNormal) {
-            if(joueurActuel + 1 >= nmbJoueurs)
+        if(sensNormal) {
+            if(joueurActuel == nbJoueurs-1)
                 joueurActuel = 0;
             else
                 joueurActuel++;
-        } else {
-            if(joueurActuel - 1 < 0)
-                joueurActuel = nmbJoueurs - 1;
+        } else {    
+            if(joueurActuel == 0)
+                joueurActuel = nbJoueurs-1;
             else
                 joueurActuel--;
-        }*/
-        
-        joueurActuel = !joueurActuel;
+        }
+     
     }
 }
 
@@ -330,15 +308,27 @@ void afficherCarte(Carte carte) {
             break;
 
             case 13:
-            printf("Carte changement de couleur - %s \n",couleur);
+            printf("Carte changement de couleur - %s\n",couleur);
             break;
 
             case 14:
-            printf("Carte +4  - %s \n",couleur);
+            printf("Carte +4 - %s\n",couleur);
             break;
 
             default:
             printf("%d - %s\n", carte.num, couleur);
             break;
         }
+}
+
+void reverse(int * list , int nb){
+   int *tmpList;
+   tmpList = (int*)malloc(sizeof(int)*nb);
+   if(tmpList == NULL)
+        exit(EXIT_FAILURE);
+   for (int i = nb - 1, j = 0 ; i >= 0 ; i--, j++)
+        tmpList[j] = list[i];
+   for (int i = 0 ; i < nb ; i++)
+        list[i] = tmpList[i];
+   free(tmpList);
 }
