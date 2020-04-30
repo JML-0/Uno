@@ -110,6 +110,7 @@ void play()
 
         /* On remet la carte dans la pioche et on supprime */
         deleteCard(P->player, C.num);
+        --P->player->totalCard;
         push(C);    // C'est une solution temporaire, plus tard une fonction
         shuffle();  // mettra la carte à la fin de la pile
 
