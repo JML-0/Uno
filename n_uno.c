@@ -12,6 +12,7 @@
 #include "pile.h"
 #include "controls.h"
 #include <stdio.h>
+#include <assert.h>
 
 #define checkChoice(a, b)   (a >= 0 && a <= b ? 1 : 0)
 #define validCard(a, b)     (a.color == b.color || a.num == b.num ? 1 : 0)
@@ -19,14 +20,17 @@
 
 void play()
 {
-    int nbPlayers   = 3;
-    int plus2       = 0;
-    int plus4       = 0;
-    int malusPass   = 0;
-    int indexCard   = 0;
-    int choice      = 0;
-    Players P       = NULL;
-    Carte Pioche    = getCard();
+    int nbPlayers       = 3;
+    int nbRankedPlys    = 0;
+    int plus2           = 0; 
+    int plus4           = 0;
+    int malusPass       = 0;
+    int indexCard       = 0;
+    int choice          = 0;
+    int *ranking        = malloc(sizeof(int) * nbPlayers); assert(ranking);
+    Color color         = NULL;
+    Players P           = NULL;
+    Carte Pioche        = getCard();
     Carte C;
 
     for (int i = 0; i < nbPlayers; i++) // ajout de x joueurs
@@ -98,21 +102,27 @@ void play()
         }
 
         /* On verifie si la carte selectionnee est valide */
-        while (!validCard(Pioche, C))
+        while (!validCard(Pioche, C)) // il manque la prise en compte si la carte est un changement de couleur ou +4
         {
             printf("Impossible de jouer cette carte !\n");
             indexCard = selectIndexCard(P->player);
         }
 
-        /* On remet la carte dans la pioche */
-        // ...
+        /* On remet la carte dans la pioche et on supprime */
+        deleteCard(P->player, C.num);
+        push(C);    // C'est une solution temporaire, plus tard une fonction
+        shuffle();  // mettra la carte à la fin de la pile
 
         /* On vérifie si le joueur n'a plus de carte */
-        // ...
-        // --nbPlayers
+        if (!P->player->totalCard)
+        {
+            ranking[nbRankedPlys++] = P->player->id;
+            removePlayer(P, P->player);
+            --nbPlayers;
+        }
 
         /* On applique l'effet de la carte si présent */
-        applyEffect(C, P, &plus2, &plus4);
+        applyEffect(C, P, &plus2, &plus4, &color);
 
         /* Joueur suivant */
         skip(P);
@@ -120,10 +130,18 @@ void play()
 
     /* Il reste plus qu'un joueur */
     // affichage des gagnants (par ordre)
-    // ...
+    for (int i = 0; i < nbRankedPlys; i++)
+    {
+        printf("Classement des joueurs : \n\n");
+        printf("%d - Le joueur %d\n", i + 1, ranking[i]);
+    }
+    
+    printf("FIN DE LA PARTIE\n");
+
+    free(ranking);
 }
 
-void applyEffect(Carte C, Players P, int *plus2, int *plus4)
+void applyEffect(Carte C, Players P, int *plus2, int *plus4, Color *color)
 {
     switch (C.num)
     {
@@ -144,12 +162,14 @@ void applyEffect(Carte C, Players P, int *plus2, int *plus4)
         }
         break;
     case 13: //changement de couleur
+        *color = choiceColor();
         break;
     case 14: //+4
         if (checkCardExist(P->next->player, C)) //si le prochain joueur a un +4
             *plus4 += 4;
         else
         {
+            *color = choiceColor();
             plusX(P->next->player, *plus4);
             skip(P);
         }
@@ -195,6 +215,18 @@ int checkCardExist(Player P, Carte C)
         if (P->cartes[i].num == C.num)
             return 1;
     return 0;
+}
+
+Color choiceColor()
+{
+    Color choice = NULL;
+
+    do
+    {
+        printf("Quelle couleur souhaitez-vous ? (0:bleu / 1:rouge / 2:vert / 3:jaune) "); scanf("%s", &choice);
+    } while (choice != B || choice != R || choice != G || choice != Y);
+    
+    return choice;
 }
 
 
