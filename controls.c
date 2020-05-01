@@ -149,8 +149,7 @@ Player getPlayerFromPosition(Players P, int pos)
  */ 
 int zeroCard(Player P)
 {
-    if (P->totalCard) return 0;
-    return 1;
+    return P->totalCard < 1;
 }
 
 /*
@@ -161,6 +160,7 @@ void plusX(Player P, int n)
 {
     int i = 0;
     while (i != n) { takeCard(P); i++; }
+    printf("Le joueur %d pioche %d cartes.\n", P->id, n);
 }
 
 /*
