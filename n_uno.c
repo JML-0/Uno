@@ -37,6 +37,7 @@ void play()
     while (nbPlayers > 1)
     {
         /* Affichage des cartes du joueur */
+        printf("C'est au tour du joueur %d !\n", P->player->id);
         showCardsPlayer(P->player);
 
         /* Affichage de la carte actuelle */
