@@ -22,8 +22,6 @@ void play()
 {
     int nbPlayers       = 3;
     int nbRankedPlys    = 0;
-    int plus2           = 0; 
-    int plus4           = 0;
     int malusPass       = 0;
     int indexCard       = 0;
     int choice          = 0;
@@ -44,52 +42,6 @@ void play()
         /* Affichage de la carte actuelle */
         printf("\n\nCarte actuelle : "); showCard(Pioche);
 
-        /* On applique le malus, sauf si le joueur possède également le meme */
-        if (plus2)
-        {
-            printf("%d +2 posé(s), souhaitez-vous jouer le votre ? (1:Y/0:N)", (plus2 / 2)); scanf("%d", &choice);
-            if (choice)
-            {
-                indexCard = selectIndexCard(P->player);
-                C = P->player->cartes[indexCard];
-
-                while (C.num != 12)
-                {
-                    printf("Vous devez mettre un +2 !\n");
-                    indexCard = selectIndexCard(P->player);
-                    C = P->player->cartes[indexCard];
-                }
-            }
-            else
-            {
-                plusX(P->player, plus2);
-                skip(P);
-                continue;
-            }
-        }
-        else if (plus4)
-        {
-            printf("%d +4 posé(s), souhaitez-vous jouer le votre ? (1:Y/0:N)", (plus4 / 4)); scanf("%d", &choice);
-            if (choice)
-            {
-                indexCard = selectIndexCard(P->player);
-                C = P->player->cartes[indexCard];
-
-                while (C.num != 14)
-                {
-                    printf("Vous devez mettre un +4 !\n");
-                    indexCard = selectIndexCard(P->player);
-                    C = P->player->cartes[indexCard];
-                }
-            }
-            else
-            {
-                plusX(P->player, plus4);
-                skip(P);
-                continue;
-            }
-        }
-
         /* On demande la carte à selectionner */
         indexCard = selectIndexCard(P->player);
         C = P->player->cartes[indexCard];
@@ -102,7 +54,7 @@ void play()
         }
 
         /* On verifie si la carte selectionnee est valide */
-        while (!validCard(Pioche, C)) // il manque la prise en compte si la carte est un changement de couleur ou +4
+        while (!validCard(Pioche, C))
         {
             printf("Impossible de jouer cette carte !\n");
             indexCard = selectIndexCard(P->player);
@@ -123,7 +75,7 @@ void play()
         }
 
         /* On applique l'effet de la carte si présent */
-        applyEffect(C, P, &plus2, &plus4, &color);
+        applyEffect(C, P, &color);
 
         /* Joueur suivant */
         skip(P);
@@ -142,7 +94,7 @@ void play()
     free(ranking);
 }
 
-void applyEffect(Carte C, Players P, int *plus2, int *plus4, Color *color)
+void applyEffect(Carte C, Players P, Color *color)
 {
     switch (C.num)
     {
@@ -154,26 +106,16 @@ void applyEffect(Carte C, Players P, int *plus2, int *plus4, Color *color)
         changeDirection(P);
         break;
     case 12: //+2
-        if (checkCardExist(P->next->player, C)) //si le prochain joueur a un +2
-            *plus2 += 2;
-        else
-        {
-            plusX(P->next->player, *plus2);
-            skip(P);
-        }
+        plusX(P->next->player, 2);
+        skip(P);
         break;
     case 13: //changement de couleur
         *color = choiceColor();
         break;
     case 14: //+4
-        if (checkCardExist(P->next->player, C)) //si le prochain joueur a un +4
-            *plus4 += 4;
-        else
-        {
-            *color = choiceColor();
-            plusX(P->next->player, *plus4);
-            skip(P);
-        }
+        *color = choiceColor();
+        plusX(P->next->player, 4);
+        skip(P);
         break;
     default:
         break;
@@ -208,14 +150,6 @@ Carte getCard()
         shuffle();
     }
     return C;
-}
-
-int checkCardExist(Player P, Carte C)
-{
-    for (int i = 0; i < P->totalCard; i++)
-        if (P->cartes[i].num == C.num)
-            return 1;
-    return 0;
 }
 
 Color choiceColor()
