@@ -6,29 +6,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void jouer(int nbJoueur);
+void jouer(int nbJoueurs);
 void afficherLeDeck(Carte* deck, int taille);
 void afficherCarte(Carte carte);
-void reverse(int * list , int nb);
 void menu();
+void remplirTab(int * tab, int taille);
+void afficherTab(int * tab, int taille);
+int appartientTab(int * tab, int taille, int id);
+int tour(int joueurActuel,int sensNormal, int nbJoueurs);
+
 
 int main() {
     generatePile();
-
-    /*Players P = addPlayer(NULL); //J1
-    for (int i = 0; i < 2; i++) //crée 4 joueurs
-        P = addPlayer(P);
-    showPlayers(P);
-
-    printf("------ PIOCHE ------\n");
-    Player p1 = getPlayer(P, 0);
-    takeCard(p1);
-    showPlayers(P);
-
-    printf("------ DELETE CARD ------\n");
-    deleteCard(p1, 3);
-    showPlayers(P);*/
-
     menu();
 }
 
@@ -51,10 +40,10 @@ void jouer(int nbJoueurs) {
         P = addPlayer(P);
 
     int iWin = 0;
-    int winTab[nbJoueurs];
-
+    int * winTab = malloc(nbJoueurs * sizeof(int));
+    remplirTab(winTab,nbJoueurs);
     int joueurActuel = 0; //ID du joueur actuel
-    int joueurCompteur = 0;
+    int nbJoueursActuelle = nbJoueurs;
     int sensNormal = 1; //Sens du jeu
     int malusPlus = 0, malusPasseTonTour = 0; //Les malus à executer au prochain joueur
 
@@ -65,32 +54,35 @@ void jouer(int nbJoueurs) {
         carteActuelle = pop();
 
     while(1) {
-        //showPlayers(P);
+        while(appartientTab(winTab,nbJoueurs,joueurActuel)){
+            joueurActuel = tour(joueurActuel,sensNormal,nbJoueurs);
+        }
+        
         tempPlayer = getPlayer(P, joueurActuel);
-        if(nbJoueurs == 1) {
+        if(nbJoueursActuelle == 1) {
                 int i;
-                winTab[iWin++] = tempPlayer->id;
-                printf("\n\n=== FIN DE PARTIE ===\n");
-                for(i = 0; i < iWin; i++)
-                    printf("    %d - Joueur %d\n", i+1, winTab[i]);
-                printf("\n");
+                winTab[iWin] = tempPlayer->id;
+                printf("\nClassement des joueurs: \n");
+                for(int i=0, j=1;i<nbJoueurs;i++,j++)
+                    printf("%d : Joueur %d\n",j,winTab[i]);
+                free(winTab);
                 break;
             }
 
-        printf("C'est au joueur %d de jouer !\n", tempPlayer->id);
+        
 
         int choix = 0, ok = 1, tailleActuelle = tempPlayer->totalCard;
 
         //Application des malus
         if(malusPlus > 0) {
-            printf("\n\nRajout de %d cartes dans ton deck\n\n", malusPlus);
+            printf("\n\nRajout de %d cartes au joueur %d !\n\n", malusPlus, tempPlayer->id);
             plusX(tempPlayer, malusPlus);
             ok = 0;
             tailleActuelle = tempPlayer->totalCard;
         }
 
         if(malusPasseTonTour) {
-            printf("\n\nDéso pas déso, ton tour saute\n\n");
+            printf("\n\nLe tour du joueur %d est bloque !\n\n",tempPlayer->id);
             ok = 0;
             
         }
@@ -99,25 +91,27 @@ void jouer(int nbJoueurs) {
             malusPasseTonTour = 0;
             malusPlus = 0;
         } else {
+            printf("C'est au joueur %d de jouer !\n", tempPlayer->id);
             afficherLeDeck(tempPlayer->cartes, tailleActuelle);
-            printf("\n\nDernière carte jouer : ");
+            printf("\n\nDerniere carte jouer : ");
             afficherCarte(carteActuelle);
         }
         //Choix de la carte ou alors piocher une carte
         while(ok) {
             printf("\nEcrire -1 pour piocher une carte\n");
-            printf("Ou alors selectionner une carte de 0 à %d en écrivant son numéro\n\nChoix : ", tailleActuelle - 1);
+            printf("Ou alors selectionner une carte de 0 a %d en ecrivant son numero\n\nChoix : ", tailleActuelle - 1);
 
             scanf("%d", &choix);
 
             if(choix == -1) {
                 takeCard(tempPlayer);
                 ok = 0;
-                joueurCompteur++;
+                
             } else if(choix >= 0 && choix <= tailleActuelle) {
                 //Jouer une carte
                 Carte tempCarte = tempPlayer->cartes[choix];
-                joueurCompteur++;
+                afficherCarte(tempCarte);
+                
                 if(tempCarte.num == 13 || tempCarte.num == 14) {
                     int okColor = 1, choixCouleur = 0; int tmpNum;
                     if(tempCarte.num == 13){
@@ -160,7 +154,6 @@ void jouer(int nbJoueurs) {
                         printf("\n\nLe prochain joueur prend 4 cartes\n\n");
                         malusPlus = 4;
                     }
-                    printf("La +4");
                     push(tempCarte);
                     shuffle();
                     deleteCard(tempPlayer, tempCarte.num);
@@ -199,26 +192,15 @@ void jouer(int nbJoueurs) {
         }
         //Voir s'il y a un des deux joueurs qui a gagné
         if(zeroCard(tempPlayer)) {
-            nbJoueurs--;
-            printf("Bravo joueur %d, tu as gagné !\n", tempPlayer->id);
+            printf("Bravo joueur %d, tu as fini !\n", tempPlayer->id);
             winTab[iWin++] = tempPlayer->id;
-            
-            removePlayer(P, tempPlayer);
+            nbJoueursActuelle--;
+            P = removePlayer(P, tempPlayer);
                 
         }
         //Changement de joueur pour le tour suivant
-        if(sensNormal) {
-            if(joueurActuel == nbJoueurs-1)
-                joueurActuel = 0;
-            else
-                joueurActuel++;
-        } else {    
-            if(joueurActuel == 0)
-                joueurActuel = nbJoueurs-1;
-            else
-                joueurActuel--;
-        }
-     
+        
+        joueurActuel = tour(joueurActuel,sensNormal,nbJoueurs);
     }
 }
 
@@ -320,15 +302,33 @@ void afficherCarte(Carte carte) {
             break;
         }
 }
+//Fonction qui return 1 si l'id entrée en parametre apartient au tableau entrée en parametre sinon return 0.
+int appartientTab(int * tab, int taille, int id){
+    for(int i=0;i<taille;i++){
+        if(tab[i] == id)
+            return 1;
+    }
+    return 0;
+}
+//Fonction qui remplit le tableau entrée en parametre de "-1" pour dire qu'il est vide.
+void remplirTab(int * tab, int taille){
+    for(int i=0;i<taille;i++){
+        tab[i] = -1;
+    }
+}
 
-void reverse(int * list , int nb){
-   int *tmpList;
-   tmpList = (int*)malloc(sizeof(int)*nb);
-   if(tmpList == NULL)
-        exit(EXIT_FAILURE);
-   for (int i = nb - 1, j = 0 ; i >= 0 ; i--, j++)
-        tmpList[j] = list[i];
-   for (int i = 0 ; i < nb ; i++)
-        list[i] = tmpList[i];
-   free(tmpList);
+//Fonction renvoie l'id du prochain joueur on fonction du sens.
+int tour(int joueurActuel,int sensNormal, int nbJoueurs){
+    if(sensNormal) {
+            if(joueurActuel == nbJoueurs-1)
+                joueurActuel = 0;
+            else
+                joueurActuel++;
+        } else {    
+            if(joueurActuel == 0)
+                joueurActuel = nbJoueurs-1;
+            else
+                joueurActuel--;
+    }
+    return joueurActuel;
 }

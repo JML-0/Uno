@@ -5,3 +5,4 @@
 #define PILE_MAX 108  /* Nb max de carte */
 
 #endif
+
