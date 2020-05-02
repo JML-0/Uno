@@ -7,7 +7,7 @@ extern "C" {
 
 /// Fonction principale de jeu, prend en paramètre le nombre de joueurs.
 void jouer(int nbJoueurs);
-/// Prend en paramètre une liste de cartes ainsi que sa taille et l'affiche.
+/// Prend en paramètre un joueur et affiche ses cartes.
 void afficherLeDeck(Player P);
 /// Prend une carte en paramètre et l'affiche.
 void afficherCarte(Carte carte);

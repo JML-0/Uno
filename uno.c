@@ -1,20 +1,11 @@
 #include "controls.h"
 #include "pile.h"
 #include "rules.h"
+#include "uno.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-void jouer(int nbJoueurs);
-void afficherLeDeck(Player P);
-void afficherCarte(Carte carte);
-void menu();
-void remplirTab(int * tab, int taille);
-void afficherTab(int * tab, int taille);
-int appartientTab(int * tab, int taille, int id);
-int tour(int joueurActuel,int sensNormal, int nbJoueurs);
-
 
 int main() {
     generatePile();
@@ -31,8 +22,22 @@ void menu(){
 }
 
 
-// permet de clear pour avoir un terminal plus propre
-
+/** l.47 - 62: Initialisation de la liste des joueurs et ajout des joueurs dans celle-ci; initialisation du tableau de classement, du joueur actuel, 
+               du nombre de joueurs actuel, du sens de jeu, des malus, de la dernière carte posée.
+			   
+    l.65 - 66: On ne veut pas que la première carte posée automatiquement soit un changement de couleur ou un +4, alors on repioche jusqu'à avoir une carte valide.
+	
+	l.70: début de la boucle de jeu.
+	
+	l.71 - 73: On teste si le joueur actuel appartient au tableau de classement. Si c'est le cas, alors il a déjà gagné, 
+	           on cherche donc le joueur suivant tant que le joueur actuel a déjà gagné.
+			   
+	l.77 - 86: S'il n'y a plus qu'un joueur, on l'ajoute au classement, on affiche ce dernier, on supprime la mémoire allouée et on sort de la boucle de jeu.
+	
+	l.94 - 115: Application des malus (+2, +4, passer le tour).
+	
+	l.117 - 209: Choix de la carte à jouer ou piocher une carte.
+*/
 void jouer(int nbJoueurs) {
     Players P = NULL;
 
@@ -92,7 +97,7 @@ void jouer(int nbJoueurs) {
             malusPlus = 0;
         } else {
             printf("C'est au joueur %d de jouer !\n", tempPlayer->id);
-            afficherLeDeck(tempPlayer);
+            afficherLeDeck(tempPlayer->cartes, tailleActuelle);
             printf("\n\nDerniere carte jouer : ");
             afficherCarte(carteActuelle);
         }
@@ -112,6 +117,7 @@ void jouer(int nbJoueurs) {
                 Carte tempCarte = tempPlayer->cartes[choix];
                 afficherCarte(tempCarte);
                 
+				// Jouer changement de couleur ou +4
                 if(tempCarte.num == 13 || tempCarte.num == 14) {
                     int okColor = 1, choixCouleur = 0; int tmpNum;
                     if(tempCarte.num == 13){
@@ -119,6 +125,7 @@ void jouer(int nbJoueurs) {
                     } else {
                         tmpNum = 14;
                     }
+					// choix couleur
                     do {
                         printf("Tu souhaite quelle couleur ? (0 = Rouge, 1 = Bleu, 2 = Vert, 3 = Jaune): ");
                         scanf("%d", &choixCouleur);
@@ -150,14 +157,16 @@ void jouer(int nbJoueurs) {
                         }
                     } while(okColor);
                     
+					// si le joueur joue +4
                     if(tempCarte.num == 14) {
                         printf("\n\nLe prochain joueur prend 4 cartes\n\n");
-                        malusPlus = 4;
+                        malusPlus = 4; // le prochain joueur piochera 4 cartes
                     }
                     push(tempCarte);
                     shuffle();
                     deleteCard(tempPlayer, tempCarte.num);
                     ok = 0;
+				// Jouer autre chose que changement de couleur ou +4
                 } else {
                     if(tempCarte.color == carteActuelle.color || tempCarte.num == carteActuelle.num) {
 
@@ -204,12 +213,61 @@ void jouer(int nbJoueurs) {
     }
 }
 
-void afficherLeDeck(Player P) 
-{
-    for(int i = 0; i < P->totalCard; i++)
-        afficherCarte(P->cartes[i]);
+/** On parcourt le tableau de cartes et pour chaque carte, on commence par trouver sa couleur, puis son numéro et on affiche ainsi la carte.
+*/
+void afficherLeDeck(Carte* deck, int taille) {
+    for(int i = 0; i < taille; i++) {
+        char* couleur;
+
+        switch(deck[i].color) {
+            case B:
+            couleur = "Bleu";
+            break;
+
+            case R:
+            couleur = "Rouge";
+            break;
+
+            case G:
+            couleur = "Vert";
+            break;
+
+            case Y:
+            couleur = "Jaune";
+            break;
+        }
+
+        switch(deck[i].num) {
+            case 10:
+            printf("\n(%d) Carte passe ton tour - %s", i, couleur);
+            break;
+
+            case 11:
+            printf("\n(%d) Carte changement de sens - %s", i, couleur);
+            break;
+
+            case 12:
+            printf("\n(%d) Carte +2 - %s", i, couleur);
+            break;
+
+            case 13:
+            printf("\n(%d) Carte changement de couleur", i);
+            break;
+
+            case 14:
+            printf("\n(%d) Carte +4", i);
+            break;
+
+            default:
+            printf("\n(%d) %d - %s", i, deck[i].num, couleur);
+            break;
+        }
+        
+    }
 }
 
+/** Comme pour afficherLeDeck, on récupère la couleur et le numéro de la carte afin d'afficher la bonne carte.
+*/
 void afficherCarte(Carte carte) {
     char* couleur;
 
@@ -257,7 +315,10 @@ void afficherCarte(Carte carte) {
             break;
         }
 }
-//Fonction qui return 1 si l'id entrée en parametre apartient au tableau entrée en parametre sinon return 0.
+
+/** On parcourt le tableau passé en paramètre, et on teste pour chaque élément s'il est égal à l'id passé en paramètre. 
+    Si oui, retourne 1. Sinon, teste avec l'élément suivant, et si aucun des éléments n'est égal à l'id, retourne 0.
+*/
 int appartientTab(int * tab, int taille, int id){
     for(int i=0;i<taille;i++){
         if(tab[i] == id)
@@ -265,14 +326,22 @@ int appartientTab(int * tab, int taille, int id){
     }
     return 0;
 }
-//Fonction qui remplit le tableau entrée en parametre de "-1" pour dire qu'il est vide.
+
+/** Parcourt le tableau passé en paramètre en le remplissant de -1.
+*/
 void remplirTab(int * tab, int taille){
     for(int i=0;i<taille;i++){
         tab[i] = -1;
     }
 }
 
-//Fonction renvoie l'id du prochain joueur on fonction du sens.
+/** Si on joue dans le sens normal (du joueur 0 à nbJoueurs-1): si le joueur qui a joué (joueurActuel) est le dernier joueur(nbJoueurs-1),
+    alors le prochain joueur est le joueur 0; sinon le prochain joueur est joueurActuel + 1.
+	
+	Si on ne joue pas dans le sens normal (du joueur nbJoueurs-1 à 0): si le joueur qui a joué est le joueur 0, 
+	alors le prochain joueur est le dernier (nbJoueurs-1); sinon, le prochain joueur est joueurActuel - 1.
+	On retoune ainsi joueurActuel qui est maintenant le prochain joueur.
+*/
 int tour(int joueurActuel,int sensNormal, int nbJoueurs){
     if(sensNormal) {
             if(joueurActuel == nbJoueurs-1)
