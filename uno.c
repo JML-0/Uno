@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 void jouer(int nbJoueurs);
-void afficherLeDeck(Carte* deck, int taille);
+void afficherLeDeck(Player P);
 void afficherCarte(Carte carte);
 void menu();
 void remplirTab(int * tab, int taille);
