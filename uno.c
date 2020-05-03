@@ -21,22 +21,25 @@ void menu(){
     jouer(nbjoueur);
 }
 
-
-/** l.47 - 62: Initialisation de la liste des joueurs et ajout des joueurs dans celle-ci; initialisation du tableau de classement, du joueur actuel, 
+/** l.46 - 60: Initialisation de la liste des joueurs et ajout des joueurs dans celle-ci; initialisation du tableau de classement, du joueur actuel, 
                du nombre de joueurs actuel, du sens de jeu, des malus, de la dernière carte posée.
 			   
-    l.65 - 66: On ne veut pas que la première carte posée automatiquement soit un changement de couleur ou un +4, alors on repioche jusqu'à avoir une carte valide.
+    l.62 - 63: On ne veut pas que la première carte posée automatiquement soit un changement de couleur ou un +4, alors on repioche jusqu'à avoir une carte valide.
 	
-	l.70: début de la boucle de jeu.
+	l.65: début de la boucle de jeu.
 	
-	l.71 - 73: On teste si le joueur actuel appartient au tableau de classement. Si c'est le cas, alors il a déjà gagné, 
+	l.66 - 68: On teste si le joueur actuel appartient au tableau de classement. Si c'est le cas, alors il a déjà gagné, 
 	           on cherche donc le joueur suivant tant que le joueur actuel a déjà gagné.
 			   
-	l.77 - 86: S'il n'y a plus qu'un joueur, on l'ajoute au classement, on affiche ce dernier, on supprime la mémoire allouée et on sort de la boucle de jeu.
+	l.70 - 79: S'il n'y a plus qu'un joueur, on l'ajoute au classement, on affiche ce dernier, on supprime la mémoire allouée et on sort de la boucle de jeu.
 	
-	l.94 - 115: Application des malus (+2, +4, passer le tour).
+	l.86 - 102: Application des malus (+2, +4, passer le tour).
 	
-	l.117 - 209: Choix de la carte à jouer ou piocher une carte.
+	l.109 - 205: Choix de la carte à jouer ou piocher une carte.
+	
+	l.207-212: Si le joueur n'a plus de cartes, alors il a gagné, on l'ajoute donc on tableau des gagnants.
+	
+	l.215: Changement de joueur pour le tour suivant.
 */
 void jouer(int nbJoueurs) {
     Players P = NULL;
