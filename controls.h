@@ -34,7 +34,7 @@ typedef struct Player
 /// Structure de la liste des joueurs. Contient un pointeur vers le premier joueur de la liste et un pointeur vers le joueur suivant.
 typedef struct Players
 {
-    /// Pointeur vers le premier joueur
+    /// Pointeur vers un joueur
     struct Player *player;
     /// Pointeur vers le joueur suivant
     struct Players *next;
