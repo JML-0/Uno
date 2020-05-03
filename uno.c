@@ -213,7 +213,6 @@ void jouer(int nbJoueurs) {
         
         joueurActuel = tour(joueurActuel,sensNormal,nbJoueurs);
     }
-    free(winTab);
 }
 
 /** On parcourt le tableau de cartes et on affiche chaque carte.
