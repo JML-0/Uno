@@ -64,7 +64,7 @@ Players removePlayer(Players P, Player N)
     if (P->player == N)
     {
         Players r = P->next;
-        free(P->player->cartes); free(P);
+        free(P->player->cartes); free(N); free(P);
         return r;
     }
     Players courant = P, prec = P;
@@ -73,7 +73,7 @@ Players removePlayer(Players P, Player N)
         if (courant->player == N)
         {
             prec->next = courant->next;
-            free(courant->player->cartes); free(courant);
+            free(courant->player->cartes); free(N); free(courant);
             return P;
         }
         prec = courant;

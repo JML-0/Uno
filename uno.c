@@ -211,6 +211,7 @@ void jouer(int nbJoueurs) {
         
         joueurActuel = tour(joueurActuel,sensNormal,nbJoueurs);
     }
+    free(winTab);
 }
 
 /** On parcourt le tableau de cartes et pour chaque carte, on commence par trouver sa couleur, puis son numéro et on affiche ainsi la carte.

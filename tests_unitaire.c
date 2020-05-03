@@ -1,6 +1,7 @@
 #include "controls.h"
 #include "pile.h"
 #include "rules.h"
+#include "uno.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,9 +56,21 @@ int main() {
     printf("-- OK --\n\n");
 
     /*
-    *   => uno.c
+    *   => pile.c
     */
-   printf("\n=> Fichier uno.c\n\n");
+    printf("\n=> Fichier pile.c\n\n");
 
+    printf("1) Met aléatoirement les éléments dans la pile avec shuffle() \n");
+    shuffle();
+    printf("-- OK --\n\n");
+
+    printf("2) Enlève une carte de la pile avec pop() \n");
+    Carte carte = pop();
+    printf("-- OK --\n\n");
+
+    printf("3) Ajoute une carte enlevé précedement avec push() \n");
+    push(carte);
+    printf("-- OK --\n\n");
    
+   printf("\n== FIN DU TEST ==\n");
 }
