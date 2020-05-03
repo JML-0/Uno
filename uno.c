@@ -68,7 +68,6 @@ void jouer(int nbJoueurs) {
         
         tempPlayer = getPlayer(P, joueurActuel);
         if(nbJoueursActuelle == 1) {
-                int i;
                 winTab[iWin] = tempPlayer->id;
                 printf("\nClassement des joueurs: \n");
                 for(int i=0, j=1;i<nbJoueurs;i++,j++)
@@ -221,8 +220,10 @@ void jouer(int nbJoueurs) {
 */
 void afficherLeDeck(Player P) 
 {
-    for(int i = 0; i < P->totalCard; i++)
+    for(int i = 0; i < P->totalCard; i++) {
+        printf("%d) ", i);
         afficherCarte(P->cartes[i]);
+    }
 }
 
 /** Comme pour afficherLeDeck, on récupère la couleur et le numéro de la carte afin d'afficher la bonne carte.
@@ -245,6 +246,10 @@ void afficherCarte(Carte carte) {
 
             case Y:
             couleur = "Jaune";
+            break;
+
+            default:
+            couleur = "";
             break;
         }
 

@@ -57,6 +57,8 @@ extern void deleteCard(Player P, int card);
 /// Renvoie le joueur situé à l'index passée en argument.
 extern Player getPlayerFromPosition(Players P, int pos);
 
+extern int zeroCard(Player P);
+
 #ifdef __cplusplus
 }
 #endif
