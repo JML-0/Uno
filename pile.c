@@ -5,32 +5,27 @@
 #include <time.h>
 #include <assert.h>
 
-/*! \brief indice indiquant le haut de la pile. */
+/// indice indiquant le haut de la pile.
 static int _haut = -1;
-/*! \brief tableau static utilis´e pour le stockage de la pile. */
+/// tableau statique utilisé pour le stockage de la pile. 
 static Carte _pile[PILE_MAX];
 
-/*!\brief Empiler la valeur \a v dans la pile.
-* \param v la valeur `a empiler */
+/// Empiler la carte v dans la pile.
 void push(Carte v) {
     _pile[++_haut] = v;
 }
 
-/*!\brief d´epiler et renvoyer la valeur de l’´el´ement en haut de la pile.
-* \return la valeur en haut de la pile. */
+/// Dépiler et renvoyer la valeur de l’élément en haut de la pile. Retourne la valeur en haut de la pile.
 Carte pop(void) {
     return _pile[_haut--];
 }
 
-/*!\brief Indique si la pile est vide.
-* \return vrai si la pile est vide, faux sinon. */
+/// Indique si la pile est vide. Retourne 1 si la pile est vide, 0 sinon. 
 int empty(void) {
     return _haut < 0;
 }
 
-/*
- * Mélange la pile à chaque appel
- */
+/// Mélange la pile à chaque appel.
 void shuffle()
 {
     srand(time(NULL));

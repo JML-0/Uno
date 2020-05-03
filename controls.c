@@ -7,8 +7,17 @@
 #include <assert.h>
 
 int ID = 0;
-/*
- * Génère aléatoirement toutes les cartes du UNO
+/** Génère toutes les cartes du UNO dans la pile et mélange la pile. Les numéros de 0 à 9 correspondent aux cartes chiffres de 0 à 9, et celles de 10 à 14 aux malus.
+     
+	10 : passer le tour du prochain joueur.
+	
+	11: changement de sens de jeu.
+	
+	12: +2 (le prochain joueur pioche 2 cartes).
+	
+	13: changement de couleur.
+	
+	14: +4 (le joueur choisit une nouvelle couleur et le prochain joueur pioche 4 cartes).
  */ 
 void generatePile()
 {
@@ -36,8 +45,10 @@ void generatePile()
     } shuffle(); //mélange
 }
 
-/*
- * Ajoute un joueur
+/**
+ Prend une liste de joueurs en paramètre.
+ Crée un nouveau joueur et l'initialise avec un ID unique, un nombre de cartes défini, et une main aléatoire.
+ Le joueur créé est ajouté à la liste des joueurs. prout.
  */ 
 Players addPlayer(Players P)
 {
@@ -56,9 +67,12 @@ Players addPlayer(Players P)
     return p;
 }
 
-/*
- * Supprime un joueur
- */ 
+/**
+ Prend la liste des joueurs et un joueur à supprimer en paramètres.
+ Si le joueur courant dans la liste est le joueur à supprimer, libère la mémoire allouée au joueur
+ et renvoie la nouvelle liste des joueurs, sinon parcourt la liste des joueurs jusqu'à trouver le joueur
+ à supprimer. Renvoie la liste des joueurs inchangée si le joueur à supprimer n'est pas trouvé.
+ */
 Players removePlayer(Players P, Player N)
 {
     if (P->player == N)
@@ -82,8 +96,10 @@ Players removePlayer(Players P, Player N)
     return P;
 }
 
-/*
- * Affiche les joueurs et leurs infos
+/** 
+ Prend la liste des joueurs en paramètre. 
+ Tant que le joueur courant ne vaut pas NULL, affiche son ID, son nombre de cartes et ses cartes, 
+ et passe au joueur suivant.
  */ 
 void showPlayers(Players P)
 {
@@ -101,8 +117,9 @@ void showPlayers(Players P)
     }
 }
 
-/*
- * Fait piocher une carte à un joueur
+/** Prend en paramètre un joueur.
+   Permet de faire piocher une carte au joueur passé en paramètre.
+   Réalloue de la mémoire pour les cartes du joueur, et y ajoute la carte du dessus de la pioche.
  */ 
 void takeCard(Player P)
 {
@@ -110,8 +127,9 @@ void takeCard(Player P)
     P->cartes[P->totalCard++] = pop();
 }
 
-/*
- * Retourne un joueur
+/** Prend la liste des joueur et un id en paramètres.
+   Retourne le joueur dont l'ID est passé en paramètre.
+   Parcourt la liste des joueurs. Si l'ID passé en paramètre correspond à celui du joueur courant, retourne ce joueur, sinon passe au joueur suivant.
  */ 
 Player getPlayer(Players P, int id)
 {
@@ -126,8 +144,9 @@ Player getPlayer(Players P, int id)
     return NULL;
 }
 
-/*
- * Retourne un joueur depuis sa position dans la structure
+/** Prend en paramètre la liste des joueurs et un entier représentant une position.
+   Retourne un joueur depuis sa position dans la structure.
+   Parcourt la liste des joueurs en icrémentant au fur et à mesure une variable i jusqu'à pos, et retourne le joueur actuel lorque i vaut pos.
  */ 
 Player getPlayerFromPosition(Players P, int pos)
 {
@@ -144,17 +163,16 @@ Player getPlayerFromPosition(Players P, int pos)
     return NULL;
 }
 
-/*
- * Retourne 1 si le joueur n'a plus de carte, sinon 0
+/** Retourne 1 si le joueur n'a plus de cartes, 0 sinon.
  */ 
 int zeroCard(Player P)
 {
     return P->totalCard < 1;
 }
 
-/*
- * Fait piocher X carte(s) au joueur P
- * n : carte à piocher en fonction de plusieurs +2 / +4 posés
+/** Fait piocher X carte(s) au joueur P.
+   n : carte à piocher en fonction de plusieurs +2 / +4 posés.
+   Initialise i à 0. Tant que i est différent de n, fait piocher une carte au joueur P et incrément i.
  */ 
 void plusX(Player P, int n)
 {
@@ -163,9 +181,11 @@ void plusX(Player P, int n)
     printf("Le joueur %d pioche %d cartes.\n", P->id, n);
 }
 
-/*
- * Supprime une carte du joueur P
- * card : numéro de carte à supprimer
+/** Supprime une carte du joueur P.
+   card : numéro de carte à supprimer.
+   Alloue de la mémoire pour un nouveau tableau de cartes plus petit de 1 carte.
+   Parcourt les cartes du joueur P, si le numéro de la carte actuelle n'est pas égal à card, ajoute la carte au nouveau tableau.
+   Enfin, change l'ancien tableau de cartes pour le nouveau, et décrémente le nombre total de cartes de P.
  */ 
 void deleteCard(Player P, int card)
 {
