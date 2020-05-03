@@ -25,7 +25,7 @@ int empty(void) {
     return _haut < 0;
 }
 
-/// Mélange la pile à chaque appel
+/// Mélange la pile à chaque appel.
 void shuffle()
 {
     srand(time(NULL));
