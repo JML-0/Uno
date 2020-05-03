@@ -1,0 +1,4 @@
+<map id="Players" name="Players">
+<area shape="rect" id="node2" href="$structPlayer.html" title="Structure d&#39;un joueur. Contient un id, le nombre total de cartes du joueur, et un tableau de cartes..." alt="" coords="9,95,68,121"/>
+<area shape="rect" id="node3" href="$structCarte.html" title="Structure d&#39;une carte. Contient une couleur et un numéro. " alt="" coords="11,5,66,32"/>
+</map>
