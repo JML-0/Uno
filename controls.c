@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
+/// ID des joueurs
 int ID = 0;
 /** Génère toutes les cartes du UNO dans la pile et mélange la pile. Les numéros de 0 à 9 correspondent aux cartes chiffres de 0 à 9, et celles de 10 à 14 aux malus.
      
