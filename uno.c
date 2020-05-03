@@ -100,7 +100,7 @@ void jouer(int nbJoueurs) {
             malusPlus = 0;
         } else {
             printf("C'est au joueur %d de jouer !\n", tempPlayer->id);
-            afficherLeDeck(tempPlayer->cartes, tailleActuelle);
+            afficherLeDeck(tempPlayer);
             printf("\n\nDerniere carte jouer : ");
             afficherCarte(carteActuelle);
         }
@@ -217,57 +217,12 @@ void jouer(int nbJoueurs) {
     free(winTab);
 }
 
-/** On parcourt le tableau de cartes et pour chaque carte, on commence par trouver sa couleur, puis son numéro et on affiche ainsi la carte.
+/** On parcourt le tableau de cartes et on affiche chaque carte.
 */
-void afficherLeDeck(Carte* deck, int taille) {
-    for(int i = 0; i < taille; i++) {
-        char* couleur;
-
-        switch(deck[i].color) {
-            case B:
-            couleur = "Bleu";
-            break;
-
-            case R:
-            couleur = "Rouge";
-            break;
-
-            case G:
-            couleur = "Vert";
-            break;
-
-            case Y:
-            couleur = "Jaune";
-            break;
-        }
-
-        switch(deck[i].num) {
-            case 10:
-            printf("\n(%d) Carte passe ton tour - %s", i, couleur);
-            break;
-
-            case 11:
-            printf("\n(%d) Carte changement de sens - %s", i, couleur);
-            break;
-
-            case 12:
-            printf("\n(%d) Carte +2 - %s", i, couleur);
-            break;
-
-            case 13:
-            printf("\n(%d) Carte changement de couleur", i);
-            break;
-
-            case 14:
-            printf("\n(%d) Carte +4", i);
-            break;
-
-            default:
-            printf("\n(%d) %d - %s", i, deck[i].num, couleur);
-            break;
-        }
-        
-    }
+void afficherLeDeck(Player P) 
+{
+    for(int i = 0; i < P->totalCard; i++)
+        afficherCarte(P->cartes[i]);
 }
 
 /** Comme pour afficherLeDeck, on récupère la couleur et le numéro de la carte afin d'afficher la bonne carte.
