@@ -10,33 +10,33 @@ typedef enum Color
 {
   B, R, G, Y, M, M4
 } Color;
-  
+
 /// Structure d'une carte. Contient une couleur et un numéro.
 typedef struct Carte
 {
+  /// Couleur de la carte	
   enum Color color;
+  /// Numéro de la carte 
   int num;
 } Carte;
-
 
 /// Structure d'un joueur. Contient un id, le nombre total de cartes du joueur, et un tableau de cartes.
 typedef struct Player
 {
-    /// Id du joueur
+	/// Id du joueur
     int id;
-    /// Nombre de cartes du joueur
+	/// Nombre de cartes du joueur
     int totalCard;
-    /// Tableau contenant les cartes du joueur
+	/// Tableau contenant les cartes du joueur
     struct Carte *cartes;
 } *Player;
-
 
 /// Structure de la liste des joueurs. Contient un pointeur vers le premier joueur de la liste et un pointeur vers le joueur suivant.
 typedef struct Players
 {
-    /// Pointeur vers un joueur
+	/// Pointeur vers un joueur
     struct Player *player;
-    /// Pointeur vers le joueur suivant
+	/// Pointeur vers le joueur suivant
     struct Players *next;
 } *Players;
 
@@ -56,6 +56,8 @@ extern Players removePlayer(Players P, Player N);
 extern void deleteCard(Player P, int card);
 /// Renvoie le joueur situé à l'index passée en argument.
 extern Player getPlayerFromPosition(Players P, int pos);
+/// Fait piocher X carte(s) au joueur P.
+extern void plusX(Player P, int n);
 /// Indique si le joueur passé en argument n'a plus de cartes.
 extern int zeroCard(Player P);
 
